@@ -1,24 +1,29 @@
 package com.example.myapplication
+import Constants.ACTIVITY_TRANSITION_STORAGE
 import android.Manifest
 import android.app.PendingIntent
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
+import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import com.gfg.article.activityrecognition.Constants.ACTIVITY_TRANSITION_STORAGE
 import com.google.android.gms.location.ActivityRecognition
 import com.google.android.gms.location.ActivityRecognitionClient
-import kotlinx.android.synthetic.main.activity_main.*
+import com.google.android.material.switchmaterial.SwitchMaterial
 import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
+import java.text.SimpleDateFormat
+import java.util.*
 
 class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
 
     lateinit var client: ActivityRecognitionClient
     lateinit var storage: SharedPreferences
+    private lateinit var switchActivityTransition: SwitchMaterial
+    private lateinit var tvMainActivity: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,6 +35,13 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
 
         // variable to check whether the user have already given the permissions
         storage = androidx.preference.PreferenceManager.getDefaultSharedPreferences(this)
+
+        switchActivityTransition = findViewById(R.id.switchActivityTransition)
+        tvMainActivity = findViewById(R.id.tvMainActivity)
+
+        val sdf = SimpleDateFormat("dd MMM yyyy hh:mm a")
+        val currentDate = sdf.format(Date())
+        tvMainActivity.setText("Today:\n"+currentDate)
 
         // check switch is on/off
         switchActivityTransition.isChecked = getSwitchState()
